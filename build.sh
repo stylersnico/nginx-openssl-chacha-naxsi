@@ -20,6 +20,7 @@ then
         apt-get remove nginx-full nginx nginx-common -y
 fi
 
+#Cleaning old sources
 cd /usr/src
 rm -rf nginx*
 rm -rf openssl*
@@ -31,9 +32,11 @@ latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 wait
 
-#Patch OpenSSL
-rm /usr/src/openssl-1.0.2-latest.tar.gz
+#Cleaning
+rm /usr/src/*.tar.gz
 
+
+#Patch OpenSSL
 latest_openssl=$(echo openssl-1.0.2*)
 cd "${latest_openssl}"
 curl https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_cf.patch -o openssl__chacha20_poly1305_cf.patch
