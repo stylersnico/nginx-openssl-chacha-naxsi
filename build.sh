@@ -21,6 +21,8 @@ then
 fi
 
 cd /usr/src
+rm -rf nginx*
+rm -rf openssl*
 
 #Download Latest nginx & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
@@ -31,7 +33,9 @@ wait
 
 #Patch OpenSSL
 rm /usr/src/openssl-1.0.2-latest.tar.gz
-cd openssl-1.0.2*
+
+latest_openssl=$(echo openssl-1.0.2*)
+cd "${latest_openssl}"
 curl https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_cf.patch -o openssl__chacha20_poly1305_cf.patch
 patch -p1 < openssl__chacha20_poly1305_cf.patch
 
@@ -69,7 +73,7 @@ cd "${latest_nginx//.tar*}"
 --with-threads \
 --with-http_ssl_module \
 --with-http_geoip_module \
---with-openssl=/usr/src/openssl-1.0.2* \
+--with-openssl=/usr/src/${latest_openssl} \
 --with-ld-opt=-lrt
 
 make
