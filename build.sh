@@ -38,7 +38,9 @@ latest_openssl=$(echo openssl-1.0.2*)
 cd "${latest_openssl}"
 curl https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_cf.patch -o openssl__chacha20_poly1305_cf.patch
 patch -p1 < openssl__chacha20_poly1305_cf.patch
-
+./config
+make
+make install
 
 #Configure NGINX & make & install
 cd /usr/src
