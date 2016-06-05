@@ -24,31 +24,31 @@ fi
 cd /usr/src
 rm -rf nginx*
 rm -rf openssl*
+rm -rf naxsi*
 
-#Download Latest nginx & OpenSSL, then extract.
+#Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
 
 (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2-latest.tar.gz" && tar -xaf "openssl-1.0.2-latest.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
+wget https://github.com/nbs-system/naxsi/archive/0.55rc2.tar.gz && tar -xaf 0.55rc2.tar.gz
 wait
 
 #Cleaning
 rm /usr/src/*.tar.gz
 
-
 #Patch OpenSSL
 latest_openssl=$(echo openssl-1.0.2*)
 cd "${latest_openssl}"
-curl https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_cf.patch -o openssl__chacha20_poly1305_cf.patch
-patch -p1 < openssl__chacha20_poly1305_cf.patch
+wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
+patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
 ./config
-make
-make install
 
 #Configure NGINX & make & install
 cd /usr/src
 cd "${latest_nginx//.tar*}"
 ./configure \
+--add-module=../naxsi-0.55rc2/naxsi_src/ \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
 --http-fastcgi-temp-path=/usr/local/etc/nginx/fastcgi \
 --http-proxy-temp-path=/usr/local/etc/nginx/proxy \
@@ -98,5 +98,6 @@ fi
 if [ $ft = "y" ]
 then
         service nginx stop
+        cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
         service nginx start
 fi
