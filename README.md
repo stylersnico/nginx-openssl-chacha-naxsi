@@ -1,5 +1,5 @@
-Build Nginx & OpenSSL
-=====================
+Build Nginx, Naxsi & OpenSSL
+============================
 
 ##License
 Script for building the latest release of Nginx with the latest release of OpenSSL patched for CHACHA support
@@ -26,6 +26,7 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 - HTTP2
 - Threads AIO
 - CHACHA20_POLY1305 support
+- Naxsi 0.55RC2
 
 ##Dependencies
 Build tools (included in the script)
