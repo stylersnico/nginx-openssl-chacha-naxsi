@@ -51,11 +51,13 @@ then
         #CHACHA20_POLY1305
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
         patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
-        
+        ./config  
+
         #Dynamic TLS Records
+        cd /usr/src
+        cd "${latest_nginx}"
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
         patch -p1 < nginx__dynamic_tls_records.patch
-        ./config
 
         #Configure NGINX & make & install
         cd /usr/src
@@ -124,6 +126,8 @@ then
         patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
         
         #Dynamic TLS Records
+        cd /usr/src
+        cd "${latest_nginx}"
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
         patch -p1 < nginx__dynamic_tls_records.patch
         
