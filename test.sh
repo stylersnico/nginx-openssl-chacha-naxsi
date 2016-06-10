@@ -46,14 +46,20 @@ fi
 cd /usr/src
 rm -rf nginx*
 rm -rf openssl*
-rm -rf naxsi*
+
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
 
 (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2h.tar.gz" && tar -xaf "openssl-1.0.2h.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
-wget https://github.com/nbs-system/naxsi/archive/0.55rc2.tar.gz && tar -xaf 0.55rc2.tar.gz
+
+#Download Naxsi if wanted
+if [ $naxsi = "y" ]
+then
+	rm -rf naxsi*
+	wget https://github.com/nbs-system/naxsi/archive/0.55rc2.tar.gz && tar -xaf 0.55rc2.tar.gz
+fi
 wait
 
 #Cleaning
@@ -113,6 +119,11 @@ $http2 \
 make
 make install
 
+#Add Naxsi core rules from sources
+if [ $naxsi = "y" ]
+then
+	cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
+fi  
 
 if [ $ft = "n" ]
 then
@@ -120,10 +131,6 @@ then
         systemctl unmask nginx.service
         mkdir /usr/local/etc/nginx
         mkdir /usr/local/etc/nginx/body
-		if [ $naxsi = "y" ]
-		then
-			cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
-		fi 
         service nginx stop
         service nginx start
         echo " You should reboot your server now"
@@ -132,11 +139,6 @@ fi
 if [ $ft = "y" ]
 then
         service nginx stop
-		if [ $naxsi = "y" ]
-		then
-			#Add Naxsi core rules from sources
-			cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
-		fi   
         service nginx start
 fi
 
