@@ -127,7 +127,7 @@ then
         
         #Dynamic TLS Records
         cd /usr/src
-        cd "${latest_nginx}"
+        cd "${latest_nginx//.tar*}"
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
         patch -p1 < nginx__dynamic_tls_records.patch
         ./config
