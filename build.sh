@@ -36,7 +36,7 @@ then
         #Download Latest nginx, nasxsi & OpenSSL, then extract.
         latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
 
-        (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2-latest.tar.gz" && tar -xaf "openssl-1.0.2-latest.tar.gz") &
+        (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2h.tar.gz" && tar -xaf "openssl-1.0.2h.tar.gz") &
         (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
         wget https://github.com/nbs-system/naxsi/archive/0.55rc2.tar.gz && tar -xaf 0.55rc2.tar.gz
         wait
@@ -47,8 +47,14 @@ then
         #Patch OpenSSL
         latest_openssl=$(echo openssl-1.0.2*)
         cd "${latest_openssl}"
+        
+        #CHACHA20_POLY1305
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
         patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
+        
+        #Dynamic TLS Records
+        wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
+        patch -p1 < nginx__dynamic_tls_records.patch
         ./config
 
         #Configure NGINX & make & install
@@ -112,8 +118,18 @@ then
         #Patch OpenSSL
         latest_openssl=$(echo openssl-1.0.2*)
         cd "${latest_openssl}"
+        
+        #CHACHA20_POLY1305
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
         patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
+        
+        #Dynamic TLS Records
+        wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
+        patch -p1 < nginx__dynamic_tls_records.patch
+        
+        #HTTP2 + SPDY support
+        wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__http2_spdy.patch
+        patch -p1 < nginx__http2_spdy.patch
         ./config
 
         #Configure NGINX & make & install
