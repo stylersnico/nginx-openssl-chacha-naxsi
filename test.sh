@@ -29,16 +29,16 @@ fi
 #Registering vars for NGINX modules
 if [ $naxsi = "n" ]
 then
-	http2="--with-http_v2_module "
+	ngx_http2="--with-http_v2_module "
 else
-	http2=""
+	ngx_http2=""
 fi
 		
 if [ $naxsi = "y" ]
 then
-	naxsi="--add-module=../naxsi-0.55rc2/naxsi_src/ "
+	ngx_naxsi="--add-module=../naxsi-0.55rc2/naxsi_src/ "
 else
-	naxsi=""
+	ngx_naxsi=""
 fi
 
 
@@ -83,7 +83,7 @@ patch -p1 < nginx__dynamic_tls_records.patch
 
 #Configure NGINX & make & install
 ./configure \
-$naxsi \
+$ngx_naxsi \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
 --http-fastcgi-temp-path=/usr/local/etc/nginx/fastcgi \
 --http-proxy-temp-path=/usr/local/etc/nginx/proxy \
@@ -100,7 +100,7 @@ $naxsi \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
 --with-ipv6 \
-$http2 \
+$ngx_http2 \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
