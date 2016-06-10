@@ -26,7 +26,6 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 - HTTP2 OR Naxsi 0.55RC2
 - Threads AIO
 - CHACHA20_POLY1305 support
-- HTTP2 + SPDY 3.1 support
 - Dynamic TLS Records
 
 ##Dependencies
