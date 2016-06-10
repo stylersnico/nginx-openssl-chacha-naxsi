@@ -55,13 +55,12 @@ then
 
         #Dynamic TLS Records
         cd /usr/src
-        cd "${latest_nginx}"
+        cd "${latest_nginx//.tar*}"
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
         patch -p1 < nginx__dynamic_tls_records.patch
+        ./config 
 
         #Configure NGINX & make & install
-        cd /usr/src
-        cd "${latest_nginx//.tar*}"
         ./configure \
         --add-module=../naxsi-0.55rc2/naxsi_src/ \
         --http-client-body-temp-path=/usr/local/etc/nginx/body \
@@ -109,7 +108,7 @@ then
         #Download Latest nginx, nasxsi & OpenSSL, then extract.
         latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
 
-        (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2-latest.tar.gz" && tar -xaf "openssl-1.0.2-latest.tar.gz") &
+        (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2h.tar.gz" && tar -xaf "openssl-1.0.2h.tar.gz") &
         (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 
         wait
@@ -124,21 +123,16 @@ then
         #CHACHA20_POLY1305
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
         patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
+        ./config
         
         #Dynamic TLS Records
         cd /usr/src
         cd "${latest_nginx}"
         wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
         patch -p1 < nginx__dynamic_tls_records.patch
-        
-        #HTTP2 + SPDY support
-        wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__http2_spdy.patch
-        patch -p1 < nginx__http2_spdy.patch
         ./config
 
         #Configure NGINX & make & install
-        cd /usr/src
-        cd "${latest_nginx//.tar*}"
         ./configure \
         --http-client-body-temp-path=/usr/local/etc/nginx/body \
         --http-fastcgi-temp-path=/usr/local/etc/nginx/fastcgi \
@@ -193,3 +187,6 @@ then
         cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
         service nginx start
 fi
+
+#Auto delete
+rm /tmp/build.sh
