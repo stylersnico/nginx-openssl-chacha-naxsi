@@ -1,4 +1,5 @@
 #!/bin/bash
+#Custom release for my Ansible deployment 
 
 #Cleaning old sources
 cd /usr/src
@@ -72,7 +73,3 @@ wait
 
 service nginx stop
 service nginx start
-
-
-#Auto delete the script at end
-rm /tmp/build.sh
