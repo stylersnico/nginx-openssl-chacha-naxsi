@@ -52,8 +52,6 @@ latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9
 (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2h.tar.gz" && tar -xaf "openssl-1.0.2h.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 
-#Download Quic
-git clone https://github.com/aunali1/ngx_quic.git
 
 #Download Naxsi if wanted
 if [ $naxsi = "y" ]
