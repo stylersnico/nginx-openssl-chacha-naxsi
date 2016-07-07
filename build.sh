@@ -136,27 +136,30 @@ fi
 
 if [ $ft = "n" ]
 then
-		# Installing init.d scripts
-		cd /etc/init.d/
-		rm nginx && nginx-debug -f
-		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx
-		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx-debug
-		chmod +x nginx && chmod +x nginx-debug
+	# Installing init.d scripts
+	cd /etc/init.d/
+	rm nginx && nginx-debug -f
+	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx
+	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx-debug
+	chmod +x nginx && chmod +x nginx-debug
 
-		# Installing systemd unit
-		cd /lib/systemd/system/
-		rm nginx.service -f
-		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/systemd/system/nginx.service
-		chmod +x nginx.service
-		systemctl enable nginx
+	# Installing systemd unit
+	cd /lib/systemd/system/
+	rm nginx.service -f
+	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/systemd/system/nginx.service
+	chmod +x nginx.service
+	systemctl enable nginx
 
-		# Installing logrotate configuration
-		cd cd /etc/logrotate.d/
-		rm nginx -f
-		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/logrotate.d/nginx
+	# Installing logrotate configuration
+	cd cd /etc/logrotate.d/
+	rm nginx -f
+	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/logrotate.d/nginx
 
-		# Nginx's cache directory case of
-		mkdir -p /usr/local/etc/nginx/
+	# Nginx's cache directory case of
+	mkdir -p /usr/local/etc/nginx/
+		
+	service nginx stop
+        service nginx start
 fi
 
 if [ $ft = "y" ]
