@@ -18,22 +18,21 @@ read naxsi
 #Asking if the script was launched once
 if [ $ft = "n" ]
 then
-        #Installing Nginx to get the init.d and systemd unit scripts ###only the first time
+        #Installing building tools
         apt-get update
-        apt-get install curl libgeoip-dev nginx-full nginx nginx-common libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
-        
-        #Removing
-        apt-get remove nginx-full nginx nginx-common -y
+        apt-get install curl libgeoip-dev libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
 fi
 
 #Registering vars for NGINX modules
 if [ $naxsi = "n" ]
 then
 	ngx_http2="--with-http_v2_module "
+	ngx_spdy="--with-http_spdy_module "
 else
 	ngx_http2=""
+	ngx_spdy=""
 fi
-		
+
 if [ $naxsi = "y" ]
 then
 	ngx_naxsi="--add-module=../naxsi-0.55rc2/naxsi_src/ "
@@ -50,9 +49,11 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-
 (curl -fLRO "https://www.openssl.org/source/openssl-1.0.2h.tar.gz" && tar -xaf "openssl-1.0.2h.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
+
+#Download Quic
+git clone https://github.com/aunali1/ngx_quic.git
 
 #Download Naxsi if wanted
 if [ $naxsi = "y" ]
@@ -74,14 +75,23 @@ wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/opens
 patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
 ./config
 
+
 #Dynamic TLS Records
 cd /usr/src
 cd "${latest_nginx//.tar*}"
 wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
 patch -p1 < nginx__dynamic_tls_records.patch
-./config
+
+#Add support for SPDY+HTTP2 patch from cloudflare
+if [ $naxsi = "n" ]
+then
+	wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
+	patch -p1 < nginx_1_9_15_http2_spdy.patch
+fi
+
 
 #Configure NGINX & make & install
+./config
 ./configure \
 $ngx_naxsi \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
@@ -101,6 +111,7 @@ $ngx_naxsi \
 --with-pcre-jit \
 --with-ipv6 \
 $ngx_http2 \
+$ngx_spdy \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
@@ -114,7 +125,7 @@ $ngx_http2 \
 --with-http_ssl_module \
 --with-http_geoip_module \
 --with-openssl=/usr/src/${latest_openssl} \
---with-ld-opt=-lrt
+--with-ld-opt=-lrt \
 
 make
 make install
@@ -123,17 +134,31 @@ make install
 if [ $naxsi = "y" ]
 then
 	cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
-fi  
+fi
 
 if [ $ft = "n" ]
 then
-        #Configure Nginx service
-        systemctl unmask nginx.service
-        mkdir /usr/local/etc/nginx
-        mkdir /usr/local/etc/nginx/body
-        service nginx stop
-        service nginx start
-        echo " You should reboot your server now"
+		# Installing init.d scripts
+		cd /etc/init.d/
+		rm nginx && nginx-debug -f
+		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx
+		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx-debug
+		chmod +x nginx && chmod +x nginx-debug
+
+		# Installing systemd unit
+		cd /lib/systemd/system/
+		rm nginx.service -f
+		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/systemd/system/nginx.service
+		chmod +x nginx.service
+		systemctl enable nginx
+
+		# Installing logrotate configuration
+		cd cd /etc/logrotate.d/
+		rm nginx -f
+		wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/logrotate.d/nginx
+
+		# Nginx's cache directory case of
+		mkdir -p /usr/local/etc/nginx/
 fi
 
 if [ $ft = "y" ]
