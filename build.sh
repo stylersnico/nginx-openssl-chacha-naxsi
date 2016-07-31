@@ -151,7 +151,7 @@ then
 	systemctl enable nginx
 
 	# Installing logrotate configuration
-	cd cd /etc/logrotate.d/
+	cd /etc/logrotate.d/
 	rm nginx -f
 	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/logrotate.d/nginx
 
