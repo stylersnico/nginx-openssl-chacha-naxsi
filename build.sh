@@ -158,6 +158,11 @@ then
 	# Nginx's cache directory case of
 	mkdir -p /usr/local/etc/nginx/
 		
+	#NGINX Configuration
+	cd /etc/nginx/
+	rm nginx.conf
+	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/nginx.conf
+	
 	service nginx stop
         service nginx start
 fi
