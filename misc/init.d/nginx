@@ -26,7 +26,7 @@ DESC=${DESC-nginx}
 NAME=${NAME-nginx}
 CONFFILE=${CONFFILE-/etc/nginx/nginx.conf}
 DAEMON=${DAEMON-/usr/sbin/nginx}
-PIDFILE=${PIDFILE-/var/run/nginx.pid}
+PIDFILE=${PIDFILE-/run/nginx.pid}
 SLEEPSEC=1
 UPGRADEWAITLOOPS=5
 
