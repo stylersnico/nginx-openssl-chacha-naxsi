@@ -75,6 +75,10 @@ cd "${latest_nginx//.tar*}"
 wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
 patch -p1 < nginx__dynamic_tls_records.patch
 
+#Patch for OpenSSL 1.1.0 support
+wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
+patch -p1 < 0001-Fix-nginx-build.patch
+
 #Add support for SPDY+HTTP2 patch from cloudflare
 if [ $naxsi = "n" ]
 then
