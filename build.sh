@@ -49,7 +49,7 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-(curl -fLRO "https://www.openssl.org/source/openssl-1.0.2h.tar.gz" && tar -xaf "openssl-1.0.2h.tar.gz") &
+(curl -fLRO "https://openssl.org/source/openssl-1.1.0-pre6.tar.gz" && tar -xaf "openssl-1.1.0-pre6.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 
 
@@ -65,13 +65,8 @@ wait
 rm /usr/src/*.tar.gz
 
 #Patch OpenSSL
-latest_openssl=$(echo openssl-1.0.2*)
+latest_openssl=$(echo openssl-1.1.0*)
 cd "${latest_openssl}"
-
-#CHACHA20_POLY1305
-wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
-patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
-./config
 
 
 #Dynamic TLS Records
