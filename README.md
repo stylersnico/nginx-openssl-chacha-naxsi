@@ -26,6 +26,7 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 - HTTP2 (AND SPDY) OR Naxsi 0.55RC2
 - Threads AIO
 - CHACHA20_POLY1305 support
+- x25519 support
 - Dynamic TLS Records (https://blog.cloudflare.com/optimizing-tls-over-tcp-to-reduce-latency/)
 
 ##Dependencies
