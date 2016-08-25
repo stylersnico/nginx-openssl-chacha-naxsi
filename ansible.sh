@@ -1,25 +1,8 @@
 #!/bin/bash
-# Custom release for Ansible
+#Custom script for update with Ansible
 
-ft=y
-naxsi=n
-
-#Registering vars for NGINX modules
-if [ $naxsi = "n" ]
-then
-	ngx_http2="--with-http_v2_module "
-	ngx_spdy="--with-http_spdy_module "
-else
-	ngx_http2=""
-	ngx_spdy=""
-fi
-
-if [ $naxsi = "y" ]
-then
-	ngx_naxsi="--add-module=../naxsi-0.55rc2/naxsi_src/ "
-else
-	ngx_naxsi=""
-fi
+ngx_http2="--with-http_v2_module "
+ngx_spdy="--with-http_spdy_module "
 
 
 #Cleaning old sources
@@ -30,29 +13,16 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-(curl -fLRO "https://www.openssl.org/source/openssl-1.0.2h.tar.gz" && tar -xaf "openssl-1.0.2h.tar.gz") &
+(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0.tar.gz" && tar -xaf "openssl-1.1.0.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
-
-
-#Download Naxsi if wanted
-if [ $naxsi = "y" ]
-then
-	rm -rf naxsi*
-	wget https://github.com/nbs-system/naxsi/archive/0.55rc2.tar.gz && tar -xaf 0.55rc2.tar.gz
-fi
 wait
 
 #Cleaning
 rm /usr/src/*.tar.gz
 
 #Patch OpenSSL
-latest_openssl=$(echo openssl-1.0.2*)
+latest_openssl=$(echo openssl-1.1.0*)
 cd "${latest_openssl}"
-
-#CHACHA20_POLY1305
-wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
-patch -p1 < openssl__chacha20_poly1305_draft_and_rfc_ossl102g.patch
-./config
 
 
 #Dynamic TLS Records
@@ -61,13 +31,13 @@ cd "${latest_nginx//.tar*}"
 wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
 patch -p1 < nginx__dynamic_tls_records.patch
 
-#Add support for SPDY+HTTP2 patch from cloudflare
-if [ $naxsi = "n" ]
-then
-	wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
-	patch -p1 < nginx_1_9_15_http2_spdy.patch
-fi
+#Patch for OpenSSL 1.1.0 support
+wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
+patch -p1 < 0001-Fix-nginx-build.patch
 
+#Add support for SPDY+HTTP2 patch from cloudflare
+wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
+patch -p1 < nginx_1_9_15_http2_spdy.patch
 
 #Configure NGINX & make & install
 ./config
@@ -109,47 +79,5 @@ $ngx_spdy \
 make
 make install
 
-#Add Naxsi core rules from sources
-if [ $naxsi = "y" ]
-then
-	cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
-fi
-
-if [ $ft = "n" ]
-then
-	# Installing init.d scripts
-	cd /etc/init.d/
-	rm nginx && nginx-debug -f
-	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx
-	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/init.d/nginx-debug
-	chmod +x nginx && chmod +x nginx-debug
-
-	# Installing systemd unit
-	cd /lib/systemd/system/
-	rm nginx.service -f
-	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/systemd/system/nginx.service
-	chmod +x nginx.service
-	systemctl enable nginx
-
-	# Installing logrotate configuration
-	cd cd /etc/logrotate.d/
-	rm nginx -f
-	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/logrotate.d/nginx
-
-	# Nginx's cache directory case of
-	mkdir -p /usr/local/etc/nginx/
-		
-	#NGINX Configuration
-	cd /etc/nginx/
-	rm nginx.conf
-	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/nginx.conf
-	
-	service nginx stop
-        service nginx start
-fi
-
-if [ $ft = "y" ]
-then
-        service nginx stop
-        service nginx start
-fi
+service nginx stop
+service nginx start
