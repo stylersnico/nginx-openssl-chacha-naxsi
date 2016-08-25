@@ -1,9 +1,6 @@
 #!/bin/bash
 #Custom script for update with Ansible
 
-ngx_http2="--with-http_v2_module "
-ngx_spdy="--with-http_spdy_module "
-
 
 #Cleaning old sources
 cd /usr/src
@@ -42,7 +39,6 @@ patch -p1 < nginx_1_9_15_http2_spdy.patch
 #Configure NGINX & make & install
 ./config
 ./configure \
-$ngx_naxsi \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
 --http-fastcgi-temp-path=/usr/local/etc/nginx/fastcgi \
 --http-proxy-temp-path=/usr/local/etc/nginx/proxy \
@@ -59,8 +55,8 @@ $ngx_naxsi \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
 --with-ipv6 \
-$ngx_http2 \
-$ngx_spdy \
+--with-http_v2_module \
+--with-http_spdy_module \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
