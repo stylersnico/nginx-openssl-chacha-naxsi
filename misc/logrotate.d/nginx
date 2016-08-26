@@ -5,7 +5,7 @@
         compress
         delaycompress
         notifempty
-        create 640 nginx adm
+        create 640 www-data adm
         sharedscripts
         postrotate
                 [ -f /run/nginx.pid ] && kill -USR1 `cat /run/nginx.pid`
