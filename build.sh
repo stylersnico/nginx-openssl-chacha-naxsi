@@ -160,7 +160,7 @@ then
 	#NGINX Configuration
 	cd /etc/nginx/
 	rm nginx.conf
-	wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/nginx.conf
+	wget https://raw.githubusercontent.com/stylersnico/nginx-secure-config/master/nginx.conf
 	
 	service nginx stop
         service nginx start
