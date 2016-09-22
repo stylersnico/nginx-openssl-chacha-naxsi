@@ -35,7 +35,7 @@ fi
 
 if [ $naxsi = "y" ]
 then
-	ngx_naxsi="--add-module=../naxsi-0.55rc2/naxsi_src/ "
+	ngx_naxsi="--add-module=../naxsi-0.55.1/naxsi_src/ "
 else
 	ngx_naxsi=""
 fi
@@ -57,7 +57,7 @@ latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9
 if [ $naxsi = "y" ]
 then
 	rm -rf naxsi*
-	wget https://github.com/nbs-system/naxsi/archive/0.55rc2.tar.gz && tar -xaf 0.55rc2.tar.gz
+	wget https://github.com/nbs-system/naxsi/archive/0.55.1.tar.gz && tar -xaf 0.55.1.tar.gz
 fi
 wait
 
@@ -130,7 +130,7 @@ make install
 #Add Naxsi core rules from sources
 if [ $naxsi = "y" ]
 then
-	cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
+	cp /usr/src/naxsi-0.55.1/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
 fi
 
 if [ $ft = "n" ]
