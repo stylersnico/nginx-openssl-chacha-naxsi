@@ -25,8 +25,8 @@ cd "${latest_openssl}"
 #Dynamic TLS Records
 cd /usr/src
 cd "${latest_nginx//.tar*}"
-wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
-patch -p1 < nginx__dynamic_tls_records.patch
+wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__1.11.5_dynamic_tls_records.patch
+patch -p1 < nginx__1.11.5_dynamic_tls_records.patch
 
 #Patch for OpenSSL 1.1.0 support
 wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
