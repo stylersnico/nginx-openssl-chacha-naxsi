@@ -27,10 +27,10 @@ fi
 if [ $naxsi = "n" ]
 then
 	ngx_http2="--with-http_v2_module "
-	ngx_spdy="--with-http_spdy_module "
+#	ngx_spdy="--with-http_spdy_module "
 else
 	ngx_http2=""
-	ngx_spdy=""
+#	ngx_spdy=""
 fi
 
 if [ $naxsi = "y" ]
@@ -83,7 +83,7 @@ patch -p1 < 0001-Fix-nginx-build.patch
 if [ $naxsi = "n" ]
 then
 	wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
-	patch -p1 < nginx_1_9_15_http2_spdy.patch
+#	patch -p1 < nginx_1_9_15_http2_spdy.patch
 fi
 
 
@@ -107,7 +107,7 @@ $ngx_naxsi \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
 $ngx_http2 \
-$ngx_spdy \
+#$ngx_spdy \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
