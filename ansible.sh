@@ -34,7 +34,7 @@ patch -p1 < 0001-Fix-nginx-build.patch
 
 #Add support for SPDY+HTTP2 patch from cloudflare
 wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
-patch -p1 < nginx_1_9_15_http2_spdy.patch
+#patch -p1 < nginx_1_9_15_http2_spdy.patch
 
 #Configure NGINX & make & install
 ./config
@@ -55,7 +55,7 @@ patch -p1 < nginx_1_9_15_http2_spdy.patch
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
 --with-http_v2_module \
---with-http_spdy_module \
+#--with-http_spdy_module \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
