@@ -27,10 +27,8 @@ fi
 if [ $naxsi = "n" ]
 then
 	ngx_http2="--with-http_v2_module "
-#	ngx_spdy="--with-http_spdy_module "
 else
 	ngx_http2=""
-#	ngx_spdy=""
 fi
 
 if [ $naxsi = "y" ]
@@ -79,13 +77,6 @@ patch -p1 < nginx__1.11.5_dynamic_tls_records.patch
 wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
 patch -p1 < 0001-Fix-nginx-build.patch
 
-#Add support for SPDY+HTTP2 patch from cloudflare
-if [ $naxsi = "n" ]
-then
-	wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
-#	patch -p1 < nginx_1_9_15_http2_spdy.patch
-fi
-
 
 #Configure NGINX & make & install
 ./config
@@ -107,7 +98,6 @@ $ngx_naxsi \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
 $ngx_http2 \
-#$ngx_spdy \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
