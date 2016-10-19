@@ -54,7 +54,6 @@ patch -p1 < nginx_1_9_15_http2_spdy.patch
 --pid-path=/usr/local/etc/nginx.pid \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
---with-ipv6 \
 --with-http_v2_module \
 --with-http_spdy_module \
 --with-debug \
