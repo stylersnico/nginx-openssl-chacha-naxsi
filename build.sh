@@ -106,7 +106,6 @@ $ngx_naxsi \
 --pid-path=/usr/local/etc/nginx.pid \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
---with-ipv6 \
 $ngx_http2 \
 $ngx_spdy \
 --with-debug \
