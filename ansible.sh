@@ -32,6 +32,10 @@ patch -p1 < nginx__1.11.5_dynamic_tls_records.patch
 wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
 patch -p1 < 0001-Fix-nginx-build.patch
 
+#Patch for SPDY + HTTP2 support
+wget https://raw.githubusercontent.com/cujanovic/nginx-http2-spdy-patch/master/nginx-spdy-1.11.5%2B.patch
+patch -p1 < nginx-spdy-1.11.5%2B.patch
+
 #Configure NGINX & make & install
 ./config
 ./configure \
