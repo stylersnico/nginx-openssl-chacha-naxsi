@@ -28,13 +28,9 @@ cd "${latest_nginx//.tar*}"
 wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__1.11.5_dynamic_tls_records.patch
 patch -p1 < nginx__1.11.5_dynamic_tls_records.patch
 
-#Patch for OpenSSL 1.1.0 support
-wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
-patch -p1 < 0001-Fix-nginx-build.patch
-
 #Patch for SPDY + HTTP2 support
 wget https://raw.githubusercontent.com/cujanovic/nginx-http2-spdy-patch/master/nginx-spdy-1.11.5%2B.patch
-patch -p1 < nginx-spdy-1.11.5%2B.patch
+patch -p1 < nginx-spdy-1.11.5*.patch
 
 #Configure NGINX & make & install
 ./config
