@@ -70,8 +70,8 @@ cd "${latest_openssl}"
 #Dynamic TLS Records
 cd /usr/src
 cd "${latest_nginx//.tar*}"
-wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__1.11.5_dynamic_tls_records.patch
-patch -p1 < nginx__1.11.5_dynamic_tls_records.patch
+wget https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.11.5%2B.patch
+patch -p1 < nginx__dynamic_tls_records_1.11.5*.patch
 
 #Configure NGINX & make & install
 ./configure \
