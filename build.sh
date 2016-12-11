@@ -107,7 +107,7 @@ $ngx_http2 \
 --with-openssl=/usr/src/${latest_openssl} \
 --with-ld-opt=-lrt \
 
-make
+make -j $(nproc)
 make install
 
 #Add Naxsi core rules from sources
