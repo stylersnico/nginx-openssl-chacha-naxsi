@@ -62,7 +62,7 @@ patch -p1 < nginx__dynamic_tls_records_1.11.5*.patch
 --with-openssl=/usr/src/${latest_openssl} \
 --with-ld-opt=-lrt \
 
-make
+make -j $(nproc)
 make install
 
 service nginx stop
