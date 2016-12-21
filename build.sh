@@ -27,15 +27,13 @@ fi
 if [ $naxsi = "n" ]
 then
 	ngx_http2="--with-http_v2_module "
-	ngx_spdy="--with-http_spdy_module "
 else
 	ngx_http2=""
-	ngx_spdy=""
 fi
 
 if [ $naxsi = "y" ]
 then
-	ngx_naxsi="--add-module=../naxsi-0.55rc2/naxsi_src/ "
+	ngx_naxsi="--add-module=../naxsi-0.55.1/naxsi_src/ "
 else
 	ngx_naxsi=""
 fi
@@ -49,7 +47,7 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0b.tar.gz" && tar -xaf "openssl-1.1.0b.tar.gz") &
+(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0c.tar.gz" && tar -xaf "openssl-1.1.0c.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 
 
@@ -57,7 +55,7 @@ latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9
 if [ $naxsi = "y" ]
 then
 	rm -rf naxsi*
-	wget https://github.com/nbs-system/naxsi/archive/0.55rc2.tar.gz && tar -xaf 0.55rc2.tar.gz
+	wget https://github.com/nbs-system/naxsi/archive/0.55.1.tar.gz && tar -xaf 0.55.1.tar.gz
 fi
 wait
 
@@ -72,23 +70,10 @@ cd "${latest_openssl}"
 #Dynamic TLS Records
 cd /usr/src
 cd "${latest_nginx//.tar*}"
-wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
-patch -p1 < nginx__dynamic_tls_records.patch
-
-#Patch for OpenSSL 1.1.0 support
-wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
-patch -p1 < 0001-Fix-nginx-build.patch
-
-#Add support for SPDY+HTTP2 patch from cloudflare
-if [ $naxsi = "n" ]
-then
-	wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
-	patch -p1 < nginx_1_9_15_http2_spdy.patch
-fi
-
+wget https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.11.5%2B.patch
+patch -p1 < nginx__dynamic_tls_records_1.11.5*.patch
 
 #Configure NGINX & make & install
-./config
 ./configure \
 $ngx_naxsi \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
@@ -106,9 +91,7 @@ $ngx_naxsi \
 --pid-path=/usr/local/etc/nginx.pid \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
---with-ipv6 \
 $ngx_http2 \
-$ngx_spdy \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
@@ -124,13 +107,13 @@ $ngx_spdy \
 --with-openssl=/usr/src/${latest_openssl} \
 --with-ld-opt=-lrt \
 
-make
+make -j $(nproc)
 make install
 
 #Add Naxsi core rules from sources
 if [ $naxsi = "y" ]
 then
-	cp /usr/src/naxsi-0.55rc2/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
+	cp /usr/src/naxsi-0.55.1/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
 fi
 
 if [ $ft = "n" ]

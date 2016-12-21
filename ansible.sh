@@ -10,7 +10,7 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0b.tar.gz" && tar -xaf "openssl-1.1.0b.tar.gz") &
+(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0c.tar.gz" && tar -xaf "openssl-1.1.0c.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 wait
 
@@ -25,16 +25,8 @@ cd "${latest_openssl}"
 #Dynamic TLS Records
 cd /usr/src
 cd "${latest_nginx//.tar*}"
-wget https://raw.githubusercontent.com/cloudflare/sslconfig/master/patches/nginx__dynamic_tls_records.patch
-patch -p1 < nginx__dynamic_tls_records.patch
-
-#Patch for OpenSSL 1.1.0 support
-wget https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha-naxsi/master/misc/0001-Fix-nginx-build.patch
-patch -p1 < 0001-Fix-nginx-build.patch
-
-#Add support for SPDY+HTTP2 patch from cloudflare
-wget https://raw.githubusercontent.com/felixbuenemann/sslconfig/updated-nginx-1.9.15-spdy-patch/patches/nginx_1_9_15_http2_spdy.patch
-patch -p1 < nginx_1_9_15_http2_spdy.patch
+wget https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.11.5%2B.patch
+patch -p1 < nginx__dynamic_tls_records_1.11.5*.patch
 
 #Configure NGINX & make & install
 ./config
@@ -54,9 +46,7 @@ patch -p1 < nginx_1_9_15_http2_spdy.patch
 --pid-path=/usr/local/etc/nginx.pid \
 --lock-path=/usr/local/etc/nginx.lock \
 --with-pcre-jit \
---with-ipv6 \
 --with-http_v2_module \
---with-http_spdy_module \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
@@ -72,7 +62,7 @@ patch -p1 < nginx_1_9_15_http2_spdy.patch
 --with-openssl=/usr/src/${latest_openssl} \
 --with-ld-opt=-lrt \
 
-make
+make -j $(nproc)
 make install
 
 service nginx stop

@@ -23,7 +23,7 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 
 - GeoIP
 - IPV6
-- HTTP2 (AND SPDY) OR Naxsi 0.55RC2
+- HTTP2 OR Naxsi 0.55.1
 - Threads AIO
 - CHACHA20_POLY1305 support
 - x25519 support
