@@ -62,11 +62,6 @@ wait
 #Cleaning
 rm /usr/src/*.tar.gz
 
-#Patch OpenSSL
-latest_openssl=$(echo openssl-1.1.0*)
-cd "${latest_openssl}"
-
-
 #Dynamic TLS Records
 cd /usr/src
 cd "${latest_nginx//.tar*}"
