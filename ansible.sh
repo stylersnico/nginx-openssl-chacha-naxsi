@@ -10,7 +10,7 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0c.tar.gz" && tar -xaf "openssl-1.1.0c.tar.gz") &
+(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0e.tar.gz" && tar -xaf "openssl-1.1.0c.tar.gz") &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 wait
 
