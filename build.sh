@@ -20,7 +20,7 @@ if [ $ft = "n" ]
 then
         #Installing building tools
         apt-get update
-        apt-get install curl libgeoip-dev libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
+        apt-get install libgeoip-dev libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
 fi
 
 #Registering vars for NGINX modules
