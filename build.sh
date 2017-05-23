@@ -20,7 +20,7 @@ if [ $ft = "n" ]
 then
         #Installing building tools
         apt-get update
-        apt-get install curl libgeoip-dev libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
+        apt-get install libgeoip-dev libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
 fi
 
 #Registering vars for NGINX modules
@@ -85,12 +85,10 @@ $ngx_naxsi \
 --user=www-data \
 --group=www-data \
 --prefix=/etc/nginx \
---sbin-path=/usr/sbin/nginx \
---conf-path=/etc/nginx/nginx.conf \
 --error-log-path=/var/log/nginx/error.log \
 --http-log-path=/var/log/nginx/access.log \
---pid-path=/usr/local/etc/nginx.pid \
---lock-path=/usr/local/etc/nginx.lock \
+--sbin-path=/usr/sbin/nginx \
+--conf-path=/etc/nginx/nginx.conf \
 --with-pcre-jit \
 $ngx_http2 \
 --with-debug \
@@ -140,12 +138,12 @@ then
 
 	# Nginx's cache directory case of
 	mkdir -p /usr/local/etc/nginx/
-		
+
 	#NGINX Configuration
 	cd /etc/nginx/
 	rm nginx.conf
 	wget https://raw.githubusercontent.com/stylersnico/nginx-secure-config/master/nginx.conf
-	
+
 	service nginx stop
         service nginx start
 fi

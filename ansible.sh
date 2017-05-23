@@ -40,12 +40,10 @@ patch -p1 < nginx__dynamic_tls_records_1.11.5*.patch
 --user=www-data \
 --group=www-data \
 --prefix=/etc/nginx \
---sbin-path=/usr/sbin/nginx \
---conf-path=/etc/nginx/nginx.conf \
 --error-log-path=/var/log/nginx/error.log \
 --http-log-path=/var/log/nginx/access.log \
---pid-path=/usr/local/etc/nginx.pid \
---lock-path=/usr/local/etc/nginx.lock \
+--sbin-path=/usr/sbin/nginx \
+--conf-path=/etc/nginx/nginx.conf \
 --with-pcre-jit \
 --with-http_v2_module \
 --with-debug \
