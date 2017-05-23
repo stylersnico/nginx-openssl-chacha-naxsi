@@ -11,8 +11,8 @@ rm -rf openssl*
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
 (curl -fLRO "https://www.openssl.org/source/openssl-1.1.0e.tar.gz" && tar -xaf "openssl-1.1.0e.tar.gz") &
-
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
+(curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.32.tar.gz" && tar -xaf "v0.32.tar.gz") &
 wait
 
 #Cleaning
@@ -58,6 +58,7 @@ patch -p1 < nginx__dynamic_tls_records_1.11.5*.patch
 --with-threads \
 --with-http_ssl_module \
 --with-http_geoip_module \
+--add-module=../headers-more-nginx-module-0.32 \
 --with-openssl=/usr/src/${latest_openssl} \
 --with-ld-opt=-lrt \
 
