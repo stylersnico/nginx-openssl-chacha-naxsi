@@ -1,7 +1,7 @@
 Build Nginx, Naxsi & OpenSSL
 ============================
 
-##License
+## License
 Script for building the latest release of Nginx with the latest release of OpenSSL patched for CHACHA support
 Copyleft (C) Nicolas Simond - 2016
 
@@ -18,7 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this script.  If not, see <http://www.gnu.org/licenses/gpl.txt>
 
-##About this script
+## About this script
 This script build the latest release of Nginx with the latest release of OpenSSL
 
 - GeoIP
