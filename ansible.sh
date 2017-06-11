@@ -25,7 +25,7 @@ cd "${latest_openssl}"
 
 #Dynamic TLS Records
 cd /usr/src
-cd "${latest_nginx//.tar*}"
+cd nginx-*
 wget https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.11.5%2B.patch
 patch -p1 < nginx__dynamic_tls_records_1.11.5*.patch
 
