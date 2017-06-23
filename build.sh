@@ -11,7 +11,7 @@ clear && clear
 echo "Did you run this script before? (y/n)"
 read ft
 
-echo "Do you want NAXSI WAF (experimental)? (y/n)"
+echo "Do you want NAXSI WAF (still experimental)? (y/n)"
 read naxsi
 
 
