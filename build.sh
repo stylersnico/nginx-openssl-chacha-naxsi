@@ -11,7 +11,7 @@ clear && clear
 echo "Did you run this script before? (y/n)"
 read ft
 
-echo "Do you want NAXSI WAF (this disable HTTP2 support)? (y/n)"
+echo "Do you want NAXSI WAF (experimental)? (y/n)"
 read naxsi
 
 
@@ -28,12 +28,12 @@ if [ $naxsi = "n" ]
 then
 	ngx_http2="--with-http_v2_module "
 else
-	ngx_http2=""
+	ngx_http2="--with-http_v2_module "
 fi
 
 if [ $naxsi = "y" ]
 then
-	ngx_naxsi="--add-module=../naxsi-0.55.1/naxsi_src/ "
+	ngx_naxsi="--add-module=../naxsi/naxsi_src/ "
 else
 	ngx_naxsi=""
 fi
@@ -56,7 +56,8 @@ latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9
 if [ $naxsi = "y" ]
 then
 	rm -rf naxsi*
-	wget https://github.com/nbs-system/naxsi/archive/0.55.1.tar.gz && tar -xaf 0.55.1.tar.gz
+	git clone https://github.com/nbs-system/naxsi.git --branch http2
+	
 fi
 wait
 
@@ -113,7 +114,7 @@ make install
 #Add Naxsi core rules from sources
 if [ $naxsi = "y" ]
 then
-	cp /usr/src/naxsi-0.55.1/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
+	cp /usr/src/naxsi/naxsi_config/naxsi_core.rules /etc/nginx/naxsi_core.rules
 fi
 
 if [ $ft = "n" ]
