@@ -23,7 +23,7 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 
 - GeoIP
 - IPV6
-- HTTP2 OR Naxsi 0.55.1
+- HTTP2 and NAXSI HTTP2 dev branch
 - Threads AIO
 - CHACHA20_POLY1305 support
 - x25519 support
@@ -35,7 +35,7 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 Build tools (included in the script)
 
 ## Designed for
-Debian 8
+Debian 8 and Debian 9
 
 ## Installation
 <code>cd /tmp && wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh</code>
