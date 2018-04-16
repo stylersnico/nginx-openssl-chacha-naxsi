@@ -73,7 +73,7 @@ cd "${latest_openssl}"
 cd /usr/src
 cd nginx-*
 wget https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch
-patch -p1 < nginx__dynamic_tls_records_1.13*.patch
+patch -p1 < nginx__dynamic_tls_records_1.13.0+.patch
 
 #Configure NGINX & make & install
 ./configure \
@@ -104,7 +104,7 @@ $ngx_http2 \
 --with-threads \
 --with-http_ssl_module \
 --with-http_geoip_module \
---add-module=../headers-more-nginx-module-0.32 \
+--add-module=../headers-more-nginx-module-0.33 \
 --with-openssl=/usr/src/${latest_openssl} \
 --with-ld-opt=-lrt \
 
