@@ -47,7 +47,7 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-(curl -fLRO "https://www.openssl.org/source/openssl-1.1.0h.tar.gz" && tar -xaf "openssl-1.1.0h.tar.gz") &
+git clone https://github.com/openssl/openssl.git openssl &
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 (curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz" && tar -xaf "v0.33.tar.gz") &
 
@@ -63,10 +63,6 @@ wait
 
 #Cleaning
 rm /usr/src/*.tar.gz
-
-#Patch OpenSSL
-latest_openssl=$(echo openssl-1.1.0*)
-cd "${latest_openssl}"
 
 
 #Dynamic TLS Records
@@ -105,7 +101,8 @@ $ngx_http2 \
 --with-http_ssl_module \
 --with-http_geoip_module \
 --add-module=../headers-more-nginx-module-0.33 \
---with-openssl=/usr/src/${latest_openssl} \
+--with-openssl=/usr/src/openssl \
+--with-openssl-opt=enable-tls1_3 \
 --with-ld-opt=-lrt \
 
 make -j $(nproc)
