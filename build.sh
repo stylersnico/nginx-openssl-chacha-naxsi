@@ -56,7 +56,7 @@ git clone https://github.com/openssl/openssl.git openssl &
 if [ $naxsi = "y" ]
 then
 	rm -rf naxsi*
-	git clone https://github.com/nbs-system/naxsi.git --branch http2
+	git clone https://github.com/nbs-system/naxsi.git --branch master
 	
 fi
 wait
