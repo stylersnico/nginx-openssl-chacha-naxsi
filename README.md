@@ -27,12 +27,15 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 - Threads AIO
 - CHACHA20_POLY1305 support
 - x25519 support
+- TLS 1.3 support
 - Dynamic TLS Records (https://blog.cloudflare.com/optimizing-tls-over-tcp-to-reduce-latency/)
 - [Headers More](https://github.com/openresty/headers-more-nginx-module)
 
 
 ## Dependencies
 Build tools (included in the script)
+
+Thanks to https://github.com/hakasenyang/openssl-patch/blob/master/README.md
 
 ## Designed for
 Debian 8 and Debian 9
