@@ -47,7 +47,7 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-git clone https://github.com/openssl/openssl.git &
+git clone https://github.com/openssl/openssl.git
 git clone https://github.com/hakasenyang/openssl-patch.git
 cd openssl
 patch -p1 < ../openssl-patch/openssl-equal-pre10_ciphers.patch
