@@ -31,6 +31,9 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 - Dynamic TLS Records (https://blog.cloudflare.com/optimizing-tls-over-tcp-to-reduce-latency/)
 - [Headers More](https://github.com/openresty/headers-more-nginx-module)
 
+## Compatible configuration file
+
+See https://github.com/stylersnico/nginx-secure-config
 
 ## Dependencies
 Build tools (included in the script)
