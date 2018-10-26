@@ -28,7 +28,6 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 - CHACHA20_POLY1305 support
 - x25519 support
 - TLS 1.3 support
-- Dynamic TLS Records (https://blog.cloudflare.com/optimizing-tls-over-tcp-to-reduce-latency/)
 - [Headers More](https://github.com/openresty/headers-more-nginx-module)
 
 ## Compatible configuration file
