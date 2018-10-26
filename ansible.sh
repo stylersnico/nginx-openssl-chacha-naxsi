@@ -22,18 +22,9 @@ cd /usr/src
 #Cleaning
 rm /usr/src/*.tar.gz
 
-#Patch OpenSSL
-latest_openssl=$(echo openssl-1.1.0*)
-cd "${latest_openssl}"
-
-
-#Dynamic TLS Records
+#Configure NGINX & make & install
 cd /usr/src
 cd nginx-*
-wget https://raw.githubusercontent.com/cujanovic/nginx-dynamic-tls-records-patch/master/nginx__dynamic_tls_records_1.13.0%2B.patch
-patch -p1 < nginx__dynamic_tls_records_1.13.0+.patch
-
-#Configure NGINX & make & install
 ./config
 ./configure \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
