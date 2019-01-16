@@ -7,12 +7,9 @@ fi
 
 clear && clear
 
-#Asking user for modules
-echo "Did you run this script before? (y/n)"
-read ft
-
-echo "Do you want NAXSI WAF (still experimental)? (y/n)"
-read naxsi
+#Set modules
+ft=y
+naxsi=y
 
 
 #Asking if the script was launched once
