@@ -40,7 +40,11 @@ Build tools (included in the script)
 Thanks to https://github.com/hakasenyang/openssl-patch/blob/master/README.md
 
 ## Designed for
-Debian 8 and Debian 9
+Debian 8,9 and 10
+
+## Note about GCC, NAXSI and Debian 10
+
+For now, NAXSI don't build with GCC 8 in Debian 10 so you need to install GCC 7 and make it default to build NAXSI.
 
 ## Installation
 <code>cd /tmp && wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh</code>
