@@ -46,5 +46,16 @@ Debian 8,9 and 10
 
 For now, NAXSI don't build with GCC 8 in Debian 10 so you need to install GCC 7 and make it default to build NAXSI.
 
+`apt install g++-7 gcc-7 gcc g++`
+
+To switch between gcc7 and gcc8
+
+```
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 1 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 2 --slave /usr/bin/g++ g++ /usr/bin/g++-7
+update-alternatives --config gcc
+```
+
+
 ## Installation
-<code>cd /tmp && wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh</code>
+`cd /tmp && wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh`
