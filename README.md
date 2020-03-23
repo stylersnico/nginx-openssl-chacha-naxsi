@@ -29,6 +29,7 @@ This script build the latest release of Nginx with the latest release of OpenSSL
 - x25519 support
 - TLS 1.3 support
 - [Headers More](https://github.com/openresty/headers-more-nginx-module)
+- Brotli compression
 
 ## Compatible configuration file
 
