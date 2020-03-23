@@ -19,6 +19,11 @@ cd /usr/src
 (curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz" && tar -xaf "v0.33.tar.gz") &
 
 
+#Download Brotli
+git clone https://github.com/google/ngx_brotli
+cd ngx_brotli
+git submodule update --init
+
 #Cleaning
 rm /usr/src/*.tar.gz
 
@@ -54,6 +59,7 @@ cd nginx-*
 --with-http_ssl_module \
 --with-http_geoip_module \
 --add-module=../headers-more-nginx-module-0.33 \
+--add-module=../ngx_brotli
 --with-openssl=/usr/src/${latest_openssl} \
 --with-openssl-opt=enable-tls1_3 \
 --with-ld-opt=-lrt
