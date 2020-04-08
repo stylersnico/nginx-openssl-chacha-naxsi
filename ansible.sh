@@ -62,7 +62,7 @@ cd nginx-*
 --with-http_geoip_module \
 --add-module=../headers-more-nginx-module-0.33 \
 --add-module=../ngx_brotli
---with-openssl=/usr/src/${latest_openssl} \
+--with-openssl=/usr/src/openssl \
 --with-openssl-opt=enable-tls1_3 \
 --with-ld-opt=-lrt
 
