@@ -23,13 +23,6 @@ then
         apt-get install libgeoip-dev libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
 fi
 
-#Registering vars for NGINX modules
-if [ $naxsi = "n" ]
-then
-	ngx_http2="--with-http_v2_module "
-else
-	ngx_http2="--with-http_v2_module "
-fi
 
 if [ $naxsi = "y" ]
 then
@@ -43,14 +36,16 @@ fi
 cd /usr/src
 rm -rf nginx*
 rm -rf openssl*
-
+rm -rf incubator-pagespeed-ngx-latest-stable
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-git clone https://github.com/openssl/openssl.git --branch OpenSSL_1_1_1-stable
+wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz
+tar -xaf openssl-1.1.1f.tar.gz
+mv openssl-1.1.1f openssl
 git clone https://github.com/hakasenyang/openssl-patch.git
 cd openssl
-patch -p1 < ../openssl-patch/openssl-1.1.1e-dev-chacha_draft.patch
+patch -p1 < ../openssl-patch/openssl-1.1.1f-chacha_draft.patch
 cd /usr/src
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 (curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz" && tar -xaf "v0.33.tar.gz") &
@@ -69,6 +64,15 @@ wait
 git clone https://github.com/google/ngx_brotli
 cd ngx_brotli
 git submodule update --init
+
+
+##Download pagespeed
+#cd /usr/src 
+#wget https://github.com/apache/incubator-pagespeed-ngx/archive/latest-stable.zip
+#unzip latest-stable.zip
+#cd incubator-pagespeed-ngx-latest-stable/
+#wget https://dl.google.com/dl/page-speed/psol/1.13.35.2-x64.tar.gz
+#tar -xzvf 1.13.35.2-x64.tar.gz
 
 #Cleaning
 rm /usr/src/*.tar.gz
@@ -91,7 +95,7 @@ $ngx_naxsi \
 --sbin-path=/usr/sbin/nginx \
 --conf-path=/etc/nginx/nginx.conf \
 --with-pcre-jit \
-$ngx_http2 \
+--with-http_v2_module \
 --with-debug \
 --with-http_stub_status_module \
 --with-http_realip_module \
@@ -105,8 +109,9 @@ $ngx_http2 \
 --with-http_ssl_module \
 --with-http_geoip_module \
 --add-module=../headers-more-nginx-module-0.33 \
---add-module=../ngx_brotli
---with-openssl=/usr/src/openssl \
+--add-module=../ngx_brotli \
+#--add-module=/usr/src/incubator-pagespeed-ngx-latest-stable \
+--with-openssl=/usr/src/openssl/ \
 --with-openssl-opt=enable-tls1_3 \
 --with-ld-opt=-lrt \
 
