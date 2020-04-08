@@ -110,8 +110,7 @@ $ngx_naxsi \
 --with-http_geoip_module \
 --add-module=../headers-more-nginx-module-0.33 \
 --add-module=../ngx_brotli \
-#--add-module=/usr/src/incubator-pagespeed-ngx-latest-stable \
---with-openssl=/usr/src/openssl/ \
+--with-openssl=/usr/src/openssl \
 --with-openssl-opt=enable-tls1_3 \
 --with-ld-opt=-lrt \
 
