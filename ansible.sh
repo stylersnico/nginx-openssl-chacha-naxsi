@@ -10,10 +10,12 @@ rm -rf openssl*
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-git clone https://github.com/openssl/openssl.git --branch OpenSSL_1_1_1-stable
+wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz
+tar -xaf openssl-1.1.1f.tar.gz
+mv openssl-1.1.1f openssl
 git clone https://github.com/hakasenyang/openssl-patch.git
 cd openssl
-patch -p1 < ../openssl-patch/openssl-1.1.1e-dev-chacha_draft.patch
+patch -p1 < ../openssl-patch/openssl-1.1.1f-chacha_draft.patch
 cd /usr/src
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 (curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz" && tar -xaf "v0.33.tar.gz") &
