@@ -38,7 +38,6 @@ See https://github.com/stylersnico/nginx-secure-config
 ## Dependencies
 Build tools (included in the script)
 
-Thanks to https://github.com/hakasenyang/openssl-patch/blob/master/README.md
 
 ## Designed for
 Debian 8,9 and 10
