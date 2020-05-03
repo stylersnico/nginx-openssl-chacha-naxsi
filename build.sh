@@ -4,6 +4,8 @@ if [ $(id -u) != "0" ]; then
     echo "Error: You must be root to run this script, please use the root user to install the software."
     exit 1
 fi
+# exit when any command fails
+set -e
 
 clear
 
@@ -64,7 +66,7 @@ rm /usr/src/*.tar.gz
 #Configure NGINX & make & install
 cd /usr/src
 cd nginx-*
-./configure \
+./configure --with-openssl=/usr/src/openssl --with-openssl-opt=enable-tls1_3 --with-ld-opt=-lrt \
 $ngx_naxsi \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
 --http-fastcgi-temp-path=/usr/local/etc/nginx/fastcgi \
@@ -93,10 +95,7 @@ $ngx_naxsi \
 --with-http_ssl_module \
 --with-http_geoip_module \
 --add-module=../headers-more-nginx-module-0.33 \
---add-module=../ngx_brotli \
---with-openssl=/usr/src/openssl \
---with-openssl-opt=enable-tls1_3 \
---with-ld-opt=-lrt \
+--add-module=../ngx_brotli
 
 make -j $(nproc)
 make install
