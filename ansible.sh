@@ -1,24 +1,23 @@
 #!/bin/bash
 #Custom script for update with Ansible
+#Warning, it built Naxsi by default
 
+# exit when any command fails
+set -e
 
 #Cleaning old sources
 cd /usr/src
 rm -rf nginx*
 rm -rf openssl*
-
+rm -rf naxsi*
+rm -rf ngx_brotli
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz
-tar -xaf openssl-1.1.1f.tar.gz
-mv openssl-1.1.1f openssl
-git clone https://github.com/hakasenyang/openssl-patch.git
-cd openssl
-patch -p1 < ../openssl-patch/openssl-1.1.1f-chacha_draft.patch
-cd /usr/src
+git clone https://github.com/openssl/openssl.git --branch OpenSSL_1_1_1-stable
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 (curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz" && tar -xaf "v0.33.tar.gz") &
+git clone https://github.com/nbs-system/naxsi.git --branch master
 
 
 #Download Brotli
@@ -30,10 +29,9 @@ git submodule update --init
 rm /usr/src/*.tar.gz
 
 #Configure NGINX & make & install
-cd /usr/src
-cd nginx-*
-./config
-./configure \
+cd /usr/src/nginx-*
+./configure --with-openssl=/usr/src/openssl --with-openssl-opt=enable-tls1_3 --with-ld-opt=-lrt \
+--add-module=../naxsi/naxsi_src/ \
 --http-client-body-temp-path=/usr/local/etc/nginx/body \
 --http-fastcgi-temp-path=/usr/local/etc/nginx/fastcgi \
 --http-proxy-temp-path=/usr/local/etc/nginx/proxy \
@@ -62,9 +60,6 @@ cd nginx-*
 --with-http_geoip_module \
 --add-module=../headers-more-nginx-module-0.33 \
 --add-module=../ngx_brotli
---with-openssl=/usr/src/openssl \
---with-openssl-opt=enable-tls1_3 \
---with-ld-opt=-lrt
 
 make -j $(nproc)
 make install
