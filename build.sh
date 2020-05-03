@@ -38,6 +38,7 @@ fi
 cd /usr/src
 rm -rf nginx*
 rm -rf openssl*
+rm -rf ngx_brotli
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
