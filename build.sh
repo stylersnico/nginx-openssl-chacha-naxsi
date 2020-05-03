@@ -5,7 +5,7 @@ if [ $(id -u) != "0" ]; then
     exit 1
 fi
 
-clear && clear
+clear
 
 #Set modules
 echo "Did you run this script before? (y/n)"
@@ -36,17 +36,10 @@ fi
 cd /usr/src
 rm -rf nginx*
 rm -rf openssl*
-rm -rf incubator-pagespeed-ngx-latest-stable
 
 #Download Latest nginx, nasxsi & OpenSSL, then extract.
 latest_nginx=$(curl -L http://nginx.org/en/download.html | egrep -o "nginx\-[0-9.]+\.tar[.a-z]*" | head -n 1)
-wget https://www.openssl.org/source/openssl-1.1.1f.tar.gz
-tar -xaf openssl-1.1.1f.tar.gz
-mv openssl-1.1.1f openssl
-git clone https://github.com/hakasenyang/openssl-patch.git
-cd openssl
-patch -p1 < ../openssl-patch/openssl-1.1.1f-chacha_draft.patch
-cd /usr/src
+git clone https://github.com/openssl/openssl.git --branch OpenSSL_1_1_1-stable
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 (curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz" && tar -xaf "v0.33.tar.gz") &
 
@@ -56,7 +49,6 @@ if [ $naxsi = "y" ]
 then
 	rm -rf naxsi*
 	git clone https://github.com/nbs-system/naxsi.git --branch master
-	
 fi
 wait
 
@@ -65,14 +57,6 @@ git clone https://github.com/google/ngx_brotli
 cd ngx_brotli
 git submodule update --init
 
-
-##Download pagespeed
-#cd /usr/src 
-#wget https://github.com/apache/incubator-pagespeed-ngx/archive/latest-stable.zip
-#unzip latest-stable.zip
-#cd incubator-pagespeed-ngx-latest-stable/
-#wget https://dl.google.com/dl/page-speed/psol/1.13.35.2-x64.tar.gz
-#tar -xzvf 1.13.35.2-x64.tar.gz
 
 #Cleaning
 rm /usr/src/*.tar.gz
@@ -153,7 +137,7 @@ then
 	wget https://raw.githubusercontent.com/stylersnico/nginx-secure-config/master/nginx.conf
 
 	service nginx stop
-        service nginx start
+    service nginx start
 fi
 
 if [ $ft = "y" ]
@@ -161,6 +145,3 @@ then
         service nginx stop
         service nginx start
 fi
-
-#Auto delete the script at end
-rm /tmp/build.sh
