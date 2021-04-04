@@ -16,23 +16,20 @@ read ft
 echo "Do you want NAXSI WAF (still experimental)? (y/n)"
 read naxsi
 
-
 #Asking if the script was launched once
 if [ $ft = "n" ]
 then
         #Installing building tools
         apt-get update
-        apt-get install libgeoip-dev libxslt-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git  -y
+        apt-get install libgeoip-dev libxslt1-dev libpcre3 libpcre3-dev build-essential zlib1g-dev libbz2-dev libssl-dev tar unzip curl git --no-install-recommends -y
 fi
-
 
 if [ $naxsi = "y" ]
 then
-	ngx_naxsi="--add-module=../naxsi/naxsi_src/ "
+	ngx_naxsi="--add-module=../naxsi/naxsi_src/"
 else
 	ngx_naxsi=""
 fi
-
 
 #Cleaning old sources
 cd /usr/src
@@ -46,7 +43,6 @@ git clone https://github.com/openssl/openssl.git --branch OpenSSL_1_1_1-stable
 (curl -fLRO "http://nginx.org/download/${latest_nginx}" && tar -xaf "${latest_nginx}") &
 (curl -fLRO "https://github.com/openresty/headers-more-nginx-module/archive/v0.33.tar.gz" && tar -xaf "v0.33.tar.gz") &
 
-
 #Download Naxsi if wanted
 if [ $naxsi = "y" ]
 then
@@ -59,7 +55,6 @@ wait
 git clone https://github.com/google/ngx_brotli
 cd ngx_brotli
 git submodule update --init
-
 
 #Cleaning
 rm /usr/src/*.tar.gz
@@ -136,12 +131,10 @@ then
 	rm nginx.conf
 	wget https://raw.githubusercontent.com/stylersnico/nginx-secure-config/master/nginx.conf
 
-	service nginx stop
-    service nginx start
+	systemctl stop nginx && systemctl start nginx
 fi
 
 if [ $ft = "y" ]
 then
-        service nginx stop
-        service nginx start
+        systemctl stop nginx && systemctl start nginx
 fi
