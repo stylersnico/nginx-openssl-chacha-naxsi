@@ -136,6 +136,8 @@ then
 	rm nginx.conf
 	wget https://raw.githubusercontent.com/stylersnico/nginx-secure-config/master/nginx.conf
 
+	mkdir /etc/nginx/conf.d && mkdir /etc/nginx/{sites-available,sites-enabled}
+
 	service nginx stop
     service nginx start
 fi
