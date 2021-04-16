@@ -21,7 +21,7 @@ along with this script.  If not, see <http://www.gnu.org/licenses/gpl.txt>
 
 ## About this script
 
-This script build the latest release of Nginx (1.19.x of 04/2021) with the latest release of OpenSSL (1.1.1k of 04/2021)
+This script build the latest release of Nginx with the latest release of OpenSSL 1.1.1 branch
 
 - GeoIP
 - IPV6
@@ -64,5 +64,5 @@ update-alternatives --config gcc
 ## Installation
 
 ```
-cd /tmp && apt install wget -y --no-install-recommends && wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh
+wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh
 ```
