@@ -2,6 +2,7 @@ Build Nginx, Naxsi & OpenSSL
 ============================
 
 ## License
+
 Script for building the latest release of Nginx with the latest release of OpenSSL patched for CHACHA support
 Copyleft (C) Nicolas Simond - 2016
 
@@ -19,24 +20,27 @@ You should have received a copy of the GNU General Public License
 along with this script.  If not, see <http://www.gnu.org/licenses/gpl.txt>
 
 ## About this script
-This script build the latest release of Nginx with the latest release of OpenSSL
+
+This script build the latest release of Nginx with the latest release of OpenSSL 1.1.1 branch
 
 - GeoIP
 - IPV6
-- HTTP2 and NAXSI HTTP2 dev branch
+- HTTP2 and NAXSI (HTTP2) master branch
 - Threads AIO
 - CHACHA20_POLY1305 support
 - x25519 support
 - TLS 1.3 support
 - [Headers More](https://github.com/openresty/headers-more-nginx-module)
-- Brotli compression
+- Brotli and Gzip compression
+- Tweaks for FastCGI (PHP)
 
 ## Compatible configuration file
 
 See https://github.com/stylersnico/nginx-secure-config
 
 ## Dependencies
-Build tools (included in the script)
+
+Build tools (included in the script) like GCC, Git and misc lib
 
 
 ## Designed for
@@ -44,11 +48,11 @@ Debian 8,9 and 10
 
 ## Note about GCC, NAXSI and Debian 10
 
-For now, NAXSI don't build with GCC 8 in Debian 10 so you need to install GCC 7 and make it default to build NAXSI.
+NAXSI need to be builded with GCC 8 in Debian 10, install with :
 
-`apt install g++-7 gcc-7 gcc g++`
+`apt install gcc g++`
 
-To switch between gcc7 and gcc8
+If needed, you can switch between gcc7 (if it's already installed) and gcc8 :
 
 ```
 update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 1 --slave /usr/bin/g++ g++ /usr/bin/g++-8
@@ -58,4 +62,7 @@ update-alternatives --config gcc
 
 
 ## Installation
-`cd /tmp && wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh`
+
+```
+wget --no-check-certificate https://raw.githubusercontent.com/stylersnico/nginx-openssl-chacha/master/build.sh && sh build.sh
+```
