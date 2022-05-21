@@ -1,5 +1,9 @@
+> :warning: **This repository is now archived**: Be very careful here!
+> If you wish to have the latest NGINX feature, with best security, check out my other repository since Debian 11 now include everything you will need: https://github.com/stylersnico/nginx-secure-config
+
 Build Nginx, Naxsi & OpenSSL
 ============================
+
 
 ## License
 
